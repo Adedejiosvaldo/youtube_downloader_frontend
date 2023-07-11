@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-misused-promises */
@@ -8,16 +12,16 @@ import Link from "./Link";
 
 function App() {
   const [urlValue, setUrlValue] = useState("");
-  const [data, setData] = useState<object>();
+  const [data, setData] = useState();
   const [isVideo, setAudio] = useState(true);
-  const justAButton = async (e: FormEvent<HTMLInputElement>) => {
+  const justAButton = async (e) => {
     e.preventDefault();
     console.log(`http://localhost:4000/download?url=${urlValue}`);
-    const data: object = await axios.get(
+    const response = await axios.get(
       `https://ytdl-p163.onrender.com/download?url=${urlValue}`
     );
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    setData(data);
+    setData(response);
     setUrlValue("");
   };
 
@@ -33,9 +37,7 @@ function App() {
             id=''
             placeholder='Enter Youtube Link'
             value={urlValue}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setUrlValue(e.target.value)
-            }
+            onChange={(e) => setUrlValue(e.target.value)}
           />
           <button type='submit'>Fetch Video</button>
         </form>
@@ -71,9 +73,11 @@ function App() {
                   </tr>
                   <tbody>
                     {isVideo
-                      ? data?.data.videos.map(
+                      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                        data?.data.videos.map(
                           ({ url, mimeType, height, hasVideo }) => (
                             <tr>
+                              {/* */}
                               <td> {mimeType.split(";")[0] + " "}</td>
                               <td>{hasVideo ? `${height}` + `p` : ""}</td>
                               <td>
